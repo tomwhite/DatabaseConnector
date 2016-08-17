@@ -32,16 +32,23 @@
 #' @export
 installJdbcDriver <- function(dbms) {
   jarFolder <- system.file("java", package = "DatabaseConnector") 
+  if (.Platform$OS.type == "windows") {
+    method <- "auto"
+  } else {
+    method <- "curl"
+  }
   if (dbms == "postgresql") {
     if (system.file("java", "postgresql-9.3-1101.jdbc4.jar", package = "DatabaseConnector") == "") {
-      download.file(url = "http://jdbc.postgresql.org/download/postgresql-9.3-1101.jdbc4.jar", 
+      download.file(url = "https://jdbc.postgresql.org/download/postgresql-9.3-1101.jdbc4.jar", 
                     destfile = file.path(jarFolder, "postgresql-9.3-1101.jdbc4.jar"), 
+                    method = method,
                     mode = "wb")
     }
   } else if (dbms == "sql server" || dbms == "pdw") {
     if (system.file("java", "sqljdbc4.jar", package = "DatabaseConnector") == "") {
       download.file(url = "http://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-613F99F850A8/sqljdbc_4.0.2206.100_enu.tar.gz",
                     destfile = "sqljdbc_4.0.2206.100_enu.tar.gz", 
+                    method = method, 
                     mode = "wb")
       untar(tarfile = "sqljdbc_4.0.2206.100_enu.tar.gz",
             files = file.path("sqljdbc_4.0", "enu" ,"sqljdbc4.jar"))
@@ -54,6 +61,7 @@ installJdbcDriver <- function(dbms) {
     if (system.file("java", "RedshiftJDBC4-1.1.17.1017.jar", package = "DatabaseConnector") == "") {
       download.file(url = "https://s3.amazonaws.com/redshift-downloads/drivers/RedshiftJDBC4-1.1.17.1017.jar", 
                     destfile = file.path(jarFolder, "RedshiftJDBC4-1.1.17.1017.jar"), 
+                    method = method, 
                     mode = "wb")
     }
   } else if (dbms == "oracle") {
