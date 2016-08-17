@@ -46,7 +46,7 @@ installJdbcDriver <- function(dbms) {
     }
   } else if (dbms == "sql server" || dbms == "pdw") {
     if (system.file("java", "sqljdbc4.jar", package = "DatabaseConnector") == "") {
-      download.file(url = "http://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-613F99F850A8/sqljdbc_4.0.2206.100_enu.tar.gz",
+      download.file(url = "https://download.microsoft.com/download/0/2/A/02AAE597-3865-456C-AE7F-613F99F850A8/sqljdbc_4.0.2206.100_enu.tar.gz",
                     destfile = "sqljdbc_4.0.2206.100_enu.tar.gz", 
                     method = method, 
                     mode = "wb")
