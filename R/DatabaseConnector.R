@@ -460,6 +460,31 @@ connect <- function(connectionDetails,
     attr(connection, "dbms") <- dbms
     return(connection)
   }
+  if (dbms == "hive") {
+    writeLines("Connecting using Hive driver")
+    pathToJar <- system.file("java",
+    "hive-jdbc-standalone.jar",
+    package = "DatabaseConnector")
+    driver <- jdbcSingleton("org.apache.hive.jdbc.HiveDriver", pathToJar, identifier.quote = "`")
+    if (missing(connectionString) || is.null(connectionString)) {
+      if (missing(port) || is.null(port))
+      port <- "10000"
+      connectionString <- paste0("jdbc:hive2://", host, ":", port, "/", database)
+      if (!missing(extraSettings) && !is.null(extraSettings)) {
+        connectionString <- paste(connectionString, "&", extraSettings, sep = "")
+      }
+    }
+    if (missing(user) || is.null(user)) {
+      connection <- RJDBC::dbConnect(driver, connectionString)
+    } else {
+      connection <- RJDBC::dbConnect(driver, connectionString, user, password)
+    }
+    if (!missing(schema) && !is.null(schema)) {
+      RJDBC::dbSendUpdate(connection, paste("USE", schema))
+    }
+    attr(connection, "dbms") <- dbms
+    return(connection)
+  }
 }
 
 dbConnectUsingProperties <- function(drv, url, ...) {
