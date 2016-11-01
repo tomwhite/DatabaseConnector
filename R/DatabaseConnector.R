@@ -462,7 +462,7 @@ connect <- function(connectionDetails,
   }
   if (dbms == "hive") {
     writeLines("Connecting using Hive driver")
-    pathToJar <- "/opt/cloudera/parcels/CDH-5.9.0-1.cdh5.9.0.p0.23/lib/hive/lib/*"
+    pathToJar <- "/opt/cloudera/parcels/CDH-5.9.0-1.cdh5.9.0.p0.23/lib/hive/lib/hive-jdbc.jar"
     driver <- jdbcSingleton("org.apache.hive.jdbc.HiveDriver", pathToJar, identifier.quote = "`")
     if (missing(connectionString) || is.null(connectionString)) {
       if (missing(port) || is.null(port))
