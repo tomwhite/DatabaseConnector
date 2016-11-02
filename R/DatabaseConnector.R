@@ -446,7 +446,7 @@ connect <- function(connectionDetails,
         port <- "5480"
       connectionString <- paste0("jdbc:netezza://", host, ":", port, "/", database)
       if (!missing(extraSettings) && !is.null(extraSettings)) {
-        connectionString <- paste0(connectionString, ";", extraSettings)
+        connectionString <- paste0(connectionString, "?", extraSettings)
       }
     }
     if (missing(user) || is.null(user)) {
@@ -465,26 +465,22 @@ connect <- function(connectionDetails,
     pathToJar <- system.file("java", "hive-jdbc-standalone.jar", package = "DatabaseConnector")
     driver <- jdbcSingleton("org.apache.hive.jdbc.HiveDriver", pathToJar, identifier.quote = "`")
     if (missing(connectionString) || is.null(connectionString)) {
-      # TODO: make database optional
-      if (!grepl("/", server))
-        stop("Error: database name not included in server string but is required for Hive. Please specify server as <host>/<database>")
-      parts <- unlist(strsplit(server, "/"))
-      host <- parts[1]
-      database <- parts[2]
-      if (missing(port) || is.null(port))
+      if (missing(port) || is.null(port)) {
         port <- "10000"
-      connectionString <- paste0("jdbc:hive2://", host, ":", port, "/", database)
+      }
+      if (missing(schema) || is.null(schema)) {
+        connectionString <- paste0("jdbc:hive2://", server, ":", port)
+      } else {
+        connectionString <- paste0("jdbc:hive2://", server, ":", port, "/", schema)
+      }
       if (!missing(extraSettings) && !is.null(extraSettings)) {
-        connectionString <- paste(connectionString, "&", extraSettings, sep = "")
+        connectionString <- paste0(connectionString, ";", extraSettings)
       }
     }
     if (missing(user) || is.null(user)) {
       connection <- RJDBC::dbConnect(driver, connectionString)
     } else {
       connection <- RJDBC::dbConnect(driver, connectionString, user, password)
-    }
-    if (!missing(schema) && !is.null(schema)) {
-      RJDBC::dbSendUpdate(connection, paste("USE", schema))
     }
     attr(connection, "dbms") <- dbms
     return(connection)
