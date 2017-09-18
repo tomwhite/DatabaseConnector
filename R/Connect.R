@@ -491,6 +491,7 @@ connect <- function(connectionDetails,
                  "'pathToDriver', pointing to the local path to directory containing the Impala JDBC JAR files"))
     }
     driverClasspath <- paste(list.files(pathToDriver, "\\.jar$", full.names = TRUE), collapse = ":")
+    writeLines(paste0("driverClasspath: ", driverClasspath))
     if (nchar(driverClasspath) == 0) {
       stop(paste0("Error: no JAR files found in '",
                   pathToDriver,
