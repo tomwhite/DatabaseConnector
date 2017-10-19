@@ -318,7 +318,7 @@ insertTable <- function(connection,
               isDate = isDate,
               MARGIN = 1,
               FUN = insertRowOracle)
-      } else if (attr(connection, "dbms") == "impala") {
+      } else if (attr(connection, "dbms") == "impala" || attr(connection, "dbms") == "impala-kudu") {
         apply(data[start:end,
               ,
               drop = FALSE],

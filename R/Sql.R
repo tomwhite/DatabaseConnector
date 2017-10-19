@@ -308,7 +308,7 @@ querySql <- function(connection, sql) {
   tryCatch({
     result <- lowLevelQuerySql(connection, sqlStatements[1])
     colnames(result) <- toupper(colnames(result))
-    if (attr(connection, "dbms") == "impala") {
+    if (attr(connection, "dbms") == "impala" || attr(connection, "dbms") == "impala-kudu") {
       for (colname in colnames(result)) {
         if (grepl("DATE", colname)) {
           result[[colname]] <- as.Date(result[[colname]], "%Y-%m-%d")
@@ -357,7 +357,7 @@ querySql.ffdf <- function(connection, sql) {
   tryCatch({
     result <- lowLevelQuerySql.ffdf(connection, sql)
     colnames(result) <- toupper(colnames(result))
-    if (attr(connection, "dbms") == "impala") {
+    if (attr(connection, "dbms") == "impala" || attr(connection, "dbms") == "impala-kudu") {
       for (colname in colnames(result)) {
         if (grepl("DATE", colname)) {
           result[[colname]] <- as.Date(result[[colname]], "%Y-%m-%d")

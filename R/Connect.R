@@ -484,7 +484,7 @@ connect <- function(connectionDetails,
     attr(connection, "dbms") <- dbms
     return(connection)
   }
-  if (dbms == "impala") {
+  if (dbms == "impala" || dbms == "impala-kudu") {
     writeLines("Connecting using Impala driver")
     if (missing(pathToDriver) || is.null(pathToDriver)) {
       stop(paste("Error: pathToDriver not set but is required for Impala. Please download the Impala JDBC driver, then add the argument ",

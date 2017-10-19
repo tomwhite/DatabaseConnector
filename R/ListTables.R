@@ -38,7 +38,7 @@
 #' @export
 getTableNames <- function(connection, databaseSchema) {
   dbms <- attr(connection, "dbms")
-  if (dbms == "mysql" || dbms == "impala") {
+  if (dbms == "mysql" || dbms == "impala" || dbms == "impala-kudu") {
     query <- paste("SHOW TABLES IN", databaseSchema)
   } else if (dbms == "sql server" || dbms == "pdw") {
     databaseSchema <- strsplit(databaseSchema, "\\.")[[1]]
